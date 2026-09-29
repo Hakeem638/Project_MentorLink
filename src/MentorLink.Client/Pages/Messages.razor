@@ -6,6 +6,7 @@
 @inject AppState State
 @inject NavigationManager Nav
 @inject IJSRuntime JS
+@inject IConfiguration Configuration
 @implements IAsyncDisposable
 
 <PageTitle>Messages — MentorLink</PageTitle>
@@ -119,7 +120,9 @@
         if (first != 0) await OpenThread(first);
 
         hub = new HubConnectionBuilder()
-            .WithUrl(Nav.ToAbsoluteUri("/hubs/chat"))
+            .WithUrl(new Uri(
+                new Uri(Configuration["ApiBaseUrl"] ?? Nav.BaseUri, UriKind.Absolute),
+                "/hubs/chat"))
             .WithAutomaticReconnect()
             .Build();
 
