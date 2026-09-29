@@ -12,6 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddSignalR();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("VercelFrontend", policy =>
+        policy.WithOrigins("https://mentorlink-client.vercel.app")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
 
 builder.Services.AddSingleton<JwtTokenService>();
 
@@ -60,6 +68,7 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCors("VercelFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
