@@ -52,7 +52,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     if (db.Database.IsRelational())
-        db.Database.EnsureCreated();
+        db.Database.Migrate();
     SeedData.Ensure(db);
 }
 
