@@ -11,7 +11,7 @@
 
 <PageTitle>Messages — MentorLink</PageTitle>
 
-<div class="msg-page">
+<div class="msg-page @(threadOpen ? "thread-open" : "")">
     <div class="convs">
         <div class="chead">
             <h2>Messages</h2>
@@ -23,7 +23,7 @@
         <div class="convlist">
             @foreach (var conv in FilteredConversations)
             {
-                <button class="conv @(conv.PartnerId == activePartnerId ? "on" : "")" @onclick="() => OpenThread(conv.PartnerId)">
+                <button class="conv @(conv.PartnerId == activePartnerId ? "on" : "")" @onclick="() => OpenThread(conv.PartnerId, show: true)">
                     <Avatar Name="@conv.PartnerName" />
                     <span class="cbody">
                         <span class="row1"><b>@conv.PartnerName</b><span class="time">@Stamp(conv.LastAt)</span></span>
@@ -50,6 +50,7 @@
         else
         {
             <div class="thead">
+                <button class="iconbtn thread-back" aria-label="Back to conversations" @onclick="() => threadOpen = false"><Icon Name="back" Size="18" /></button>
                 <Avatar Name="@ActiveConversation.PartnerName" />
                 <div>
                     <b>@ActiveConversation.PartnerName</b>
@@ -96,6 +97,7 @@
     private bool hubConnected;
     private ElementReference threadEl;
     private bool scrollPending;
+    private bool threadOpen;
 
     private int MyId => State.CurrentUser?.Id ?? 0;
 
@@ -117,11 +119,11 @@
         var query = HttpUtility.ParseQueryString(new Uri(Nav.Uri).Query);
         var with = int.TryParse(query["with"], out var id) ? id : 0;
         var first = with != 0 ? with : conversations.FirstOrDefault()?.PartnerId ?? 0;
-        if (first != 0) await OpenThread(first);
+        if (first != 0) await OpenThread(first, show: with != 0);
 
         hub = new HubConnectionBuilder()
             .WithUrl(new Uri(
-                new Uri(Configuration["ApiBaseUrl"] ?? Nav.BaseUri, UriKind.Absolute),
+                new Uri(string.IsNullOrWhiteSpace(Configuration["ApiBaseUrl"]) ? Nav.BaseUri : Configuration["ApiBaseUrl"]!, UriKind.Absolute),
                 "/hubs/chat"))
             .WithAutomaticReconnect()
             .Build();
@@ -149,9 +151,12 @@
         }
     }
 
-    private async Task OpenThread(int partnerId)
+    // show: on phones only one pane fits, so this decides whether the thread
+    // replaces the conversation list. Desktop always shows both.
+    private async Task OpenThread(int partnerId, bool show)
     {
         activePartnerId = partnerId;
+        if (show) threadOpen = true;
         thread = await Api.GetThreadAsync(MyId, partnerId) ?? new();
         conversations = await Api.GetConversationsAsync(MyId) ?? conversations;
         scrollPending = true;

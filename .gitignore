@@ -16,3 +16,18 @@ Thumbs.db
 ## Local secrets
 appsettings.Local.json
 *.local.json
+appsettings.Production.json
+secrets.json
+.env
+.env.*
+*.pfx
+*.pem
+*.key
+*.p12
+
+## Build / deploy output
+publish/
+.vercel/
+
+## Local notes
+DEPLOYMENT_HANDOFF.md

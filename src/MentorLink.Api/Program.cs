@@ -76,3 +76,6 @@ app.MapHub<ChatHub>("/hubs/chat");
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+// Exposes the entry point to WebApplicationFactory in tests/MentorLink.Api.Tests.
+public partial class Program { }

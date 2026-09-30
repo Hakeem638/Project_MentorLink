@@ -7,7 +7,10 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? builder.HostEnvironment.BaseAddress;
+// Production (Vercel) points at the Render API; appsettings.Development.json blanks it
+// so local runs talk to the API that is serving the client.
+var configuredApi = builder.Configuration["ApiBaseUrl"];
+var apiBaseUrl = string.IsNullOrWhiteSpace(configuredApi) ? builder.HostEnvironment.BaseAddress : configuredApi;
 
 builder.Services.AddScoped<AppState>();
 builder.Services.AddScoped<AuthHeaderHandler>();

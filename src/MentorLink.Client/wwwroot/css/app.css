@@ -35,6 +35,8 @@ a { color: inherit; text-decoration: none; }
 svg { display: block; flex-shrink: 0; }
 button { font: inherit; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
+/* Blazor's FocusOnNavigate focuses the page heading for screen readers; don't draw a ring on it */
+h1:focus, h1:focus-visible { outline: none; }
 ::selection { background: var(--ink); color: #fff; }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; animation: none !important; }
@@ -316,7 +318,7 @@ select.inp {
 .conv .cbody .row1 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .conv b { font-size: 13.5px; color: #fff; }
 .conv .time { font-size: 10.5px; color: #8b8f95; flex-shrink: 0; }
-.conv .prev { font-size: 12px; color: #9a9ea3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.conv .prev { display: block; font-size: 12px; color: #9a9ea3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .conv .pill { background: #fff; color: var(--ink); border-radius: 99px; font-size: 10px; font-weight: 700; padding: 1.5px 7px; flex-shrink: 0; }
 .conv:hover:not(.on) { background: rgba(255,255,255,.05); }
 .conv.on { background: #fff; color: var(--ink); }
@@ -458,13 +460,145 @@ select.inp {
 .vrow .lnk:hover { border-color: var(--ink); }
 .vrow .acts { display: flex; gap: 8px; flex-shrink: 0; }
 
-/* ---------- Responsive fallback: content panes scroll, never the page ---------- */
+/* Mobile-only controls, hidden on desktop */
+.sb-top { display: contents; }
+.sb-toggle { display: none; background: none; border: none; color: #fff; padding: 8px; margin: -8px -6px -8px 0; border-radius: 8px; }
+.sb-toggle:hover { background: rgba(255,255,255,.08); }
+.thread-back { display: none; margin-left: -8px; }
+.admin-name { font-size: 13px; font-weight: 600; }
+
+/* ============================================================
+   Responsive — tablet (<= 980px)
+   ============================================================ */
 @media (max-width: 980px) {
     .two-col, .set-layout, .discover { display: block; }
-    .filters, .set-menu { width: 100%; margin-bottom: 18px; }
-    .stats { grid-template-columns: 1fr; }
-    .content { padding: 22px 18px 30px; }
+    .two-col > * + * { margin-top: 22px; }
+    .filters { width: 100%; margin-bottom: 18px; }
+    .set-menu { width: 100%; margin-bottom: 18px; flex-direction: row; overflow-x: auto; }
+    .set-menu button { white-space: nowrap; }
+    .content { padding: 24px 22px 32px; }
+    .msg-page { margin: -24px -22px -32px; }
+    .convs { width: 240px; }
     .goal-card { flex-wrap: wrap; }
-    .msg-page { margin: -22px -18px -30px; }
-    .convs { width: 220px; }
+    .goal-card .gleft { width: 100%; }
+    .mentee-row { flex-wrap: wrap; }
+    .mentee-row .mg { flex-basis: 200px; }
+}
+
+/* ============================================================
+   Responsive — phone (<= 860px): sidebar becomes a top bar
+   ============================================================ */
+@media (max-width: 860px) {
+    body { font-size: 14.5px; }
+
+    /* App shell */
+    .app { flex-direction: column; }
+    .sb { width: 100%; height: auto; position: sticky; top: 0; z-index: 30; padding: 12px 16px; overflow: visible; box-shadow: var(--shadow-md); }
+    .sb-top { display: flex; align-items: center; justify-content: space-between; }
+    .sb .logo { padding: 0; }
+    .sb-toggle { display: grid; place-items: center; }
+    .sb nav, .sb .me { display: none; }
+    .sb.open nav { display: flex; padding-top: 14px; }
+    .sb.open nav a { padding: 12px; font-size: 14.5px; }
+    .sb.open .me { display: flex; }
+    .content { padding: 20px 16px 28px; }
+
+    .pagehead { flex-wrap: wrap; margin-bottom: 18px; }
+    .pagehead h1 { font-size: 21px; }
+    .stats { grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+    .stat { padding: 12px; }
+    .stat .lab { font-size: 9.5px; letter-spacing: .06em; }
+    .stat b { font-size: 26px; margin-top: 4px; }
+    .stat span:not(.lab) { display: none; }
+    .stat .lab { display: block; line-height: 1.3; min-height: 2.6em; }
+    .card { padding: 16px; }
+
+    /* Landing */
+    .land .nav { padding: 14px 16px; gap: 12px; }
+    .land .nav .links { gap: 14px; font-size: 13.5px; }
+    .land .nav .links a.mut:not([href="/signup"]) { display: none; }
+    .hero { padding: 52px 20px 44px; }
+    .hero p { font-size: 16px; }
+    .feat { padding: 0 16px 48px; }
+    .how, .testi { padding: 48px 16px; }
+    .how h2, .testi h2 { font-size: 23px; margin-bottom: 28px; }
+    .foot { padding: 28px 16px; flex-direction: column; align-items: flex-start; }
+    .foot .flinks { flex-wrap: wrap; gap: 14px 20px; }
+
+    /* Auth */
+    .auth { padding: 24px 14px; place-items: start center; }
+    .auth-card { padding: 28px 20px; border-radius: 14px; }
+
+    /* Student dashboard */
+    .mentor-card { flex-wrap: wrap; row-gap: 10px; }
+    .mentor-card .info { flex-basis: calc(100% - 62px); }
+    .mentor-card .btn { margin-left: auto; }
+    .cta-banner { flex-direction: column; align-items: flex-start; padding: 20px; }
+
+    /* Discover */
+    .searchbar { max-width: none; }
+    .mgrid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
+
+    /* Mentor profile */
+    .phead { padding: 20px; gap: 16px; }
+    .phead .pinfo { min-width: 0; flex-basis: 100%; }
+    .phead h1 { font-size: 22px; }
+    .tabs { overflow-x: auto; }
+    .tabs button { white-space: nowrap; padding: 10px 12px; }
+
+    /* Messages: one pane at a time */
+    .msg-page { margin: -20px -16px -28px; min-height: calc(100dvh - 58px); }
+    .convs { width: 100%; }
+    .thread { display: none; position: static; max-height: none; height: calc(100dvh - 58px); }
+    .msg-page.thread-open .convs { display: none; }
+    .msg-page.thread-open .thread { display: flex; }
+    .thread-back { display: grid; }
+    .thread .thead { padding: 10px 14px; }
+    .tbody { padding: 16px 14px; }
+    .bub { max-width: 82%; }
+    .composer { padding: 10px 12px; gap: 6px; }
+
+    /* Goals */
+    .goal-card { padding: 18px; gap: 18px; }
+    .gright { width: 100%; flex-direction: row; justify-content: flex-start; text-align: left; }
+
+    /* Mentor dashboard */
+    .reqcard { flex-wrap: wrap; }
+    .reqcard .acts { width: 100%; }
+    .reqcard .acts .btn { flex: 1; }
+    .mentee-row .mb { width: auto; flex: 1 1 calc(100% - 64px); }
+    .mentee-row .last { width: auto; flex: 1 1 100%; }
+
+    /* Notifications */
+    .notif { flex-wrap: wrap; padding: 14px; }
+    .notif .ntime { flex-basis: 100%; padding-left: 60px; }
+
+    /* Settings */
+    .fgrid { grid-template-columns: 1fr; }
+
+    /* My Mentorships */
+    .mship { padding: 18px; }
+    .mship .info { width: auto; flex: 1 1 calc(100% - 72px); }
+    .mship .meta { width: 100%; }
+    .mship .goal { min-width: 0; flex-basis: 100%; }
+    .mship .acts { flex-direction: row; width: 100%; }
+    .mship .acts > * { flex: 1; }
+
+    /* Admin */
+    .admin-top { padding: 12px 16px; }
+    .admin-top .lab, .admin-name { display: none; }
+    .admin-shell { flex-direction: column; }
+    .admin-shell .sb { padding: 8px 12px; position: static; box-shadow: none; }
+    .admin-shell .sb nav { display: flex; flex-direction: row; overflow-x: auto; }
+    .admin-shell .sb nav a { white-space: nowrap; }
+    .pills { overflow-x: auto; }
+    .pills button { white-space: nowrap; }
+    .vrow .vb { width: auto; flex: 1 1 calc(100% - 72px); }
+    .vrow .applied { width: auto; flex: 1 1 100%; }
+    .vrow .acts { width: 100%; }
+    .vrow .acts .btn { flex: 1; }
+}
+
+@media (max-width: 420px) {
+    .roles { grid-template-columns: 1fr; }
 }

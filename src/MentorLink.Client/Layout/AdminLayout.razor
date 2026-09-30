@@ -16,7 +16,7 @@ else
         <span class="lab">Admin Panel</span>
         <div class="row gap8">
             <Avatar Name="@State.CurrentUser.FullName" PhotoUrl="@State.CurrentUser.PhotoUrl" Size="sm" />
-            <span style="font-size:13px; font-weight:600">@State.CurrentUser.FullName</span>
+            <span class="admin-name">@State.CurrentUser.FullName</span>
             <button class="btn btn-ghost btn-sm" @onclick="SignOut" title="Sign out"><Icon Name="out" Size="15" /></button>
         </div>
     </div>

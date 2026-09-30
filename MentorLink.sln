@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.0.0
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -7,6 +7,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MentorLink.Client", "src\MentorLink.Client\MentorLink.Client.csproj", "{B8F4DAE2-5C30-4F9B-AD72-1A6E3B9C4D52}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MentorLink.Api", "src\MentorLink.Api\MentorLink.Api.csproj", "{C9A5EBF3-6D41-4A0C-BE83-2B7F4CAD5E63}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{35731E4A-ED7C-411A-880C-CCEB8CE27297}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MentorLink.Api.Tests", "tests\MentorLink.Api.Tests\MentorLink.Api.Tests.csproj", "{7A573E26-A4A1-41DD-8DC0-29D6AC50AA14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,8 +30,15 @@ Global
 		{C9A5EBF3-6D41-4A0C-BE83-2B7F4CAD5E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9A5EBF3-6D41-4A0C-BE83-2B7F4CAD5E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9A5EBF3-6D41-4A0C-BE83-2B7F4CAD5E63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A573E26-A4A1-41DD-8DC0-29D6AC50AA14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A573E26-A4A1-41DD-8DC0-29D6AC50AA14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A573E26-A4A1-41DD-8DC0-29D6AC50AA14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A573E26-A4A1-41DD-8DC0-29D6AC50AA14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7A573E26-A4A1-41DD-8DC0-29D6AC50AA14} = {35731E4A-ED7C-411A-880C-CCEB8CE27297}
 	EndGlobalSection
 EndGlobal

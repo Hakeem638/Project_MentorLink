@@ -1,11 +1,17 @@
 @inject AppState State
 @inject NavigationManager Nav
 
-<aside class="sb">
-    <a class="logo" href="/">
-        <span class="mark"><Icon Name="link" Size="15" /></span>MentorLink
-    </a>
-    <nav>
+<aside class="sb @(menuOpen ? "open" : "")">
+    <div class="sb-top">
+        <a class="logo" href="/">
+            <span class="mark"><Icon Name="link" Size="15" /></span>MentorLink
+        </a>
+        <button class="sb-toggle" aria-label="@(menuOpen ? "Close menu" : "Open menu")" aria-expanded="@menuOpen"
+                @onclick="() => menuOpen = !menuOpen">
+            <Icon Name="@(menuOpen ? "close" : "menu")" Size="20" />
+        </button>
+    </div>
+    <nav @onclick="() => menuOpen = false">
         @if (IsMentor)
         {
             <NavLink href="/mentor-dashboard"><Icon Name="home" Size="17" />Dashboard</NavLink>
@@ -35,6 +41,9 @@
 </aside>
 
 @code {
+    // Mobile only: the nav collapses behind a menu button below 860px.
+    private bool menuOpen;
+
     private bool IsMentor => State.CurrentUser?.Role == UserRole.Mentor;
 
     private string RoleLine => State.CurrentUser is null ? ""
